@@ -20,6 +20,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const MainScreen(),
+      routes: {
+        AddEditNoteScreen.RouteName: (context) => AddEditNoteScreen(),
+      },
     );
   }
 }

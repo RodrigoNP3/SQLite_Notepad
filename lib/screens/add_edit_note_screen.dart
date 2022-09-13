@@ -1,34 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:sqlite_notepad/model/note.dart';
 
 import '../widgets/app_text_field.dart';
+import '../notes_database.dart';
 
 class AddEditNoteScreen extends StatefulWidget {
   static String RouteName = '/AddEditNoteScreen';
 
-  bool isImportant;
-  bool isEditing;
+  bool isImportant = false;
+  bool isEditing = false;
 
-  AddEditNoteScreen({
-    Key? key,
-    this.isImportant = false,
-    this.isEditing = false,
-  }) : super(key: key);
+  // AddEditNoteScreen({
+  //   Key? key,
+  //   this.isImportant = false,
+
+  // }) : super(key: key);
 
   @override
   State<AddEditNoteScreen> createState() => _AddEditNoteScreenState();
 }
 
 class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
+  var titleController = TextEditingController();
+  var descriptionController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    var titleController = TextEditingController();
-    var descriptionController = TextEditingController();
+    void _submit() {
+      String title = titleController.text.trim();
+      String description = descriptionController.text.trim();
+
+      if (title.isEmpty && description.isEmpty) {
+        print('ADD A DESCRIPTION');
+      } else {
+        Note note = Note(
+            isImportant: widget.isImportant,
+            number: 0,
+            title: title,
+            description:
+                'Description Description Description Description Description Description Description Description Description Description Description Description Description Description',
+            createdTime: DateTime.now());
+
+        NotesDatabase.instance.create(note);
+        Navigator.of(context).pop();
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ADD OR EDIT NOT'),
+        title: Text(widget.isEditing ? 'Edit Note' : 'Add Note'),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.cancel)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.save)),
+          widget.isEditing
+              ? IconButton(onPressed: () {}, icon: const Icon(Icons.delete))
+              : IconButton(onPressed: () {}, icon: const Icon(Icons.cancel)),
+          IconButton(onPressed: _submit, icon: const Icon(Icons.save)),
         ],
       ),
       body: SingleChildScrollView(

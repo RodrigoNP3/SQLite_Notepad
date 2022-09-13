@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sqlite_notepad/model/note.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import '../notes_database.dart';
-import 'package:sqflite/sqflite.dart';
 
 import '../widgets/notes_list.dart';
+import 'add_edit_note_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -16,6 +15,10 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   late List<Note> _notes = [];
+  late List<Note> _notesFiltered = [];
+  late List<Note> selectedNotes = [];
+  int selectedFilter = 0;
+
   bool isLoading = false;
 
   Future closeDB() async {
@@ -48,10 +51,39 @@ class _MainScreenState extends State<MainScreen> {
     super.dispose();
   }
 
+  void _toggleIsImportant(Note note) {
+    NotesDatabase.instance.update(note);
+    refreshNotes();
+  }
+
   Future refreshNotes() async {
     setState(() => isLoading = true);
     this._notes = await NotesDatabase.instance.readAllNotes();
+    filterNote();
     setState(() => isLoading = false);
+  }
+
+  filterNote() {
+    if (selectedFilter == 0) {
+      selectedNotes = _notes;
+    } else if (selectedFilter == 1) {
+      selectedNotes = _notes.where((element) => !element.isImportant).toList();
+    } else {
+      selectedNotes = _notes.where((element) => element.isImportant).toList();
+    }
+  }
+
+  void toggleFilter() {
+    if (selectedFilter == 0) {
+      selectedFilter++;
+      refreshNotes();
+    } else if (selectedFilter == 1) {
+      selectedFilter++;
+      refreshNotes();
+    } else if (selectedFilter == 2) {
+      refreshNotes();
+      selectedFilter = 0;
+    }
   }
 
   @override
@@ -60,19 +92,33 @@ class _MainScreenState extends State<MainScreen> {
       appBar: AppBar(
         title: const Text('Your Notes'),
         actions: [
-          IconButton(
-            onPressed: closeDB,
-            icon: const Icon(Icons.remove),
-          ),
-          IconButton(
-            onPressed: addNote,
-            icon: const Icon(Icons.add),
-          ),
+          // Icon(Icons.category_outlined),
+          TextButton(
+            onPressed: toggleFilter,
+            child: Text(
+              selectedFilter == 0
+                  ? 'All'
+                  : selectedFilter == 1
+                      ? 'Favorites'
+                      : selectedFilter == 2
+                          ? 'Not Favorite'
+                          : '',
+              style: const TextStyle(
+                  color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          )
         ],
       ),
       body: NotesList(
-        notes: _notes,
+        notes: selectedNotes,
+        toggleIsImportant: _toggleIsImportant,
       ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context)
+                .pushNamed(AddEditNoteScreen.RouteName, arguments: {});
+          },
+          child: const Icon(Icons.note_add)),
     );
   }
 }
