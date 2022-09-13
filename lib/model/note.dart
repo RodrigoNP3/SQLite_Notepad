@@ -10,12 +10,12 @@ class NoteFields {
     time,
   ];
 
-  static final String id = '_id';
-  static final String isImportant = '_isImportant';
-  static final String number = '_number';
-  static final String title = '_title';
-  static final String description = '_description';
-  static final String time = '_time';
+  static String id = '_id';
+  static String isImportant = '_isImportant';
+  static String number = '_number';
+  static String title = '_title';
+  static String description = '_description';
+  static String time = '_time';
 }
 
 class Note {
