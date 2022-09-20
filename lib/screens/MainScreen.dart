@@ -7,6 +7,7 @@ import '../widgets/notes_list.dart';
 import 'add_edit_note_screen.dart';
 
 class MainScreen extends StatefulWidget {
+  static String RouteName = '/main-screen';
   const MainScreen({Key? key}) : super(key: key);
 
   @override
@@ -17,90 +18,41 @@ class _MainScreenState extends State<MainScreen> {
   late List<Note> _notes = [];
   late List<Note> _notesFiltered = [];
   late List<Note> selectedNotes = [];
-  int selectedFilter = 0;
+  int _selectedFilter = 0;
+
+  bool initApp = true;
 
   bool isLoading = false;
 
-  Future closeDB() async {
-    await NotesDatabase.instance.close();
-    refreshNotes();
-  }
-
-  Future addNote() async {
-    final note = Note(
-      title: 'title',
-      isImportant: true,
-      number: 1,
-      description: 'description',
-      createdTime: DateTime.now(),
-    );
-
-    await NotesDatabase.instance.create(note);
-    refreshNotes();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    refreshNotes();
-  }
-
-  @override
-  void dispose() {
-    NotesDatabase.instance.close();
-    super.dispose();
-  }
-
-  void _toggleIsImportant(Note note) {
-    NotesDatabase.instance.update(note);
-    refreshNotes();
-  }
-
-  Future refreshNotes() async {
-    setState(() => isLoading = true);
-    this._notes = await NotesDatabase.instance.readAllNotes();
-    filterNote();
-    setState(() => isLoading = false);
-  }
-
-  filterNote() {
-    if (selectedFilter == 0) {
-      selectedNotes = _notes;
-    } else if (selectedFilter == 1) {
-      selectedNotes = _notes.where((element) => !element.isImportant).toList();
-    } else {
-      selectedNotes = _notes.where((element) => element.isImportant).toList();
-    }
-  }
-
   void toggleFilter() {
-    if (selectedFilter == 0) {
-      selectedFilter++;
-      refreshNotes();
-    } else if (selectedFilter == 1) {
-      selectedFilter++;
-      refreshNotes();
-    } else if (selectedFilter == 2) {
-      refreshNotes();
-      selectedFilter = 0;
+    if (_selectedFilter == 0) {
+      _selectedFilter++;
+      // refreshNotes();
+    } else if (_selectedFilter == 1) {
+      _selectedFilter++;
+      // refreshNotes();
+    } else if (_selectedFilter == 2) {
+      // refreshNotes();
+      _selectedFilter = 0;
     }
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    Object? result = '';
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Notes'),
         actions: [
-          // Icon(Icons.category_outlined),
           TextButton(
             onPressed: toggleFilter,
             child: Text(
-              selectedFilter == 0
+              _selectedFilter == 0
                   ? 'All'
-                  : selectedFilter == 1
+                  : _selectedFilter == 1
                       ? 'Favorites'
-                      : selectedFilter == 2
+                      : _selectedFilter == 2
                           ? 'Not Favorite'
                           : '',
               style: const TextStyle(
@@ -110,13 +62,22 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
       body: NotesList(
-        notes: selectedNotes,
-        toggleIsImportant: _toggleIsImportant,
+        selectedFilter: _selectedFilter,
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context)
-                .pushNamed(AddEditNoteScreen.RouteName, arguments: {});
+          onPressed: () async {
+            result = await Navigator.of(context).pushNamed(
+              AddEditNoteScreen.RouteName,
+              arguments: {
+                'noteId': -1,
+                'title': '',
+                'description': '',
+                'isImportant': false,
+              },
+            );
+            if (result == 'update') {
+              setState(() {});
+            }
           },
           child: const Icon(Icons.note_add)),
     );

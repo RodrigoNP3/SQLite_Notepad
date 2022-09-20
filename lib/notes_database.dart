@@ -90,6 +90,24 @@ CREATE TABLE $tableNotes (
     );
   }
 
+  Future<int> toggleIsImportant(int id) async {
+    final db = await instance.database;
+    Note note = await instance.readNote(id);
+    note = Note(
+      isImportant: !note.isImportant,
+      number: note.number,
+      title: note.title,
+      description: note.description,
+      createdTime: note.createdTime,
+    );
+    return db.update(
+      tableNotes,
+      note.toJson(),
+      where: '${NoteFields.id} = ?',
+      whereArgs: [id],
+    );
+  }
+
   Future<int> delete(int id) async {
     final db = await instance.database;
 

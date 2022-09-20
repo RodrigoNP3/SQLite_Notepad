@@ -19,8 +19,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MainScreen(),
+      initialRoute: MainScreen.RouteName,
       routes: {
+        MainScreen.RouteName: (context) => const MainScreen(),
         AddEditNoteScreen.RouteName: (context) => AddEditNoteScreen(),
       },
     );
