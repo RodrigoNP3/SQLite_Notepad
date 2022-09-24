@@ -74,8 +74,8 @@ dependencies:
   <table>
 <thead>
 <tr>
-<th align="center">Home Screen Filtered</th>
-<th align="center">Home Screen Filtered</th>
+<th align="center">Important Filter</th>
+<th align="center">Not Important Filter</th>
 
 
 </tr>
@@ -84,14 +84,14 @@ dependencies:
 <tr>
   
 <td align="center">
-  <a target="_blank" rel="" href="images/Home_Screen.png">
-        <img src="images/Home_Screen.png" alt="Css Logo" with="200" height="400"/>
+  <a target="_blank" rel="" href="images/important_filter.png">
+        <img src="images/important_filter.png" alt="Css Logo" with="200" height="400"/>
 
   </a></td>
   
 <td align="center">
-  <a target="_blank" rel="" href="images/Home_Screen_2.png">
-        <img src="images/Home_Screen_2.png" alt="Css Logo" with="200" height="400"/>
+  <a target="_blank" rel="" href="images/not_important_filter.png">
+        <img src="images/not_important_filter.png" alt="Css Logo" with="200" height="400"/>
 
   </a></td>
   
