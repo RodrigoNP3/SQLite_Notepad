@@ -7,11 +7,15 @@ import '../screens/add_edit_note_screen.dart';
 import 'note_item.dart';
 
 class NotesList extends StatefulWidget {
-  int selectedFilter;
+  List<Note> notes;
+  Function toggleIsImportant;
+  Function refreshNotes;
 
   NotesList({
     Key? key,
-    required this.selectedFilter,
+    required this.notes,
+    required this.toggleIsImportant,
+    required this.refreshNotes,
   }) : super(key: key);
 
   @override
@@ -19,82 +23,35 @@ class NotesList extends StatefulWidget {
 }
 
 class _NotesListState extends State<NotesList> {
-  var result = '';
-  bool isLoading = false;
-  List<Note> notes = [];
-  List<Note> selectedNotes = [];
-
-  @override
-  void initState() {
-    super.initState();
-    refreshNotes();
-  }
-
-  @override
-  void dispose() {
-    NotesDatabase.instance.close();
-    super.dispose();
-  }
-
-  // void _toggleIsImportant(Note note) {
-  //   NotesDatabase.instance.update(note);
-  //   refreshNotes();
-  // }
-
-  Future refreshNotes() async {
-    setState(() => isLoading = true);
-    notes = await NotesDatabase.instance.readAllNotes();
-    filterNote();
-    setState(() => isLoading = false);
-  }
-
-  filterNote() {
-    if (widget.selectedFilter == 0) {
-      selectedNotes = notes;
-    } else if (widget.selectedFilter == 1) {
-      selectedNotes = notes.where((element) => !element.isImportant).toList();
-    } else {
-      selectedNotes = notes.where((element) => element.isImportant).toList();
-    }
-    print(selectedNotes.length);
-  }
-
   @override
   Widget build(BuildContext context) {
-    print(widget.selectedFilter);
     return Container(
       width: double.maxFinite,
       height: double.infinity,
-      child: notes.isNotEmpty
+      child: widget.notes.isNotEmpty
           ? MasonryGridView.count(
-              itemCount: notes.length,
+              itemCount: widget.notes.length,
               crossAxisCount: 2,
               mainAxisSpacing: 5,
               crossAxisSpacing: 5,
               itemBuilder: (context, index) {
                 return GestureDetector(
+                  onLongPress: () {},
                   onTap: () async {
-                    var thisResult = await Navigator.of(context).pushNamed(
-                      AddEditNoteScreen.RouteName,
-                      arguments: {
-                        'noteId': selectedNotes[index].id,
-                        'title': selectedNotes[index].title,
-                        'description': selectedNotes[index].description,
-                        'isImportant': selectedNotes[index].isImportant,
-                      },
-                    );
-                    result = thisResult as String;
-                    setState(() {
-                      if (result == 'update') {
-                        refreshNotes();
-                      }
+                    await Navigator.of(context)
+                        .pushNamed(AddEditNoteScreen.RouteName, arguments: {
+                      'note': widget.notes[index],
                     });
+                    widget.refreshNotes();
                   },
-                  child: NoteItem(id: selectedNotes[index].id as int),
+                  child: NoteItem(
+                    note: widget.notes[index],
+                    toggleIsImportant: widget.toggleIsImportant,
+                  ),
                 );
               },
             )
-          : const Text('NO NOTES ADDED YET'),
+          : Container(child: const Center(child: Text('NO NOTES ADDED YET'))),
     );
   }
 }

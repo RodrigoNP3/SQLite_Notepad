@@ -1,16 +1,98 @@
-# sqlite_notepad
+# SQLite Notepad
 
-A new Flutter project.
+Hello there.
+This is a simples notepad app developed in flutter.
 
-## Getting Started
+This app was developed according to the classes of:
 
-This project is a starting point for a Flutter application.
+Flutter Tutorial - SQL Database Storage Using Sqlite & Sqflite CRUD | Android & iOS - Johannes Milke Youtube Chanel;
 
-A few resources to get you started if this is your first Flutter project:
+### Versions
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Flutter**: 3.0.5
+- **Dart**: 2.17.6
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Setup
+
+Clone it in your machine:
+```bash
+git clone https://github.com/RodrigoNP3/SQLite_Notepad.git
+```
+
+Dependecies
+
+```bash
+dependencies:
+  cupertino_icons: ^1.0.2
+  sqflite: ^2.0.3+1
+  flutter_staggered_grid_view: ^0.6.2
+  intl: ^0.17.0
+```
+
+### Navigation
+
+<table>
+<thead>
+<tr>
+<th align="center">Home Screen</th>
+<th align="center">Home Screen</th>
+<th align="center">Add Note Screen</th>
+  <th align="center">Edit Note Screen </th>
+
+</tr>
+</thead>
+<tbody>
+<tr>
+  
+<td align="center">
+  <a target="_blank" rel="" href="images/Home_Screen.png">
+        <img src="images/Home_Screen.png" alt="Css Logo" with="200" height="400"/>
+
+  </a></td>
+  
+<td align="center">
+  <a target="_blank" rel="" href="images/Home_Screen_2.png">
+        <img src="images/Home_Screen_2.png" alt="Css Logo" with="200" height="400"/>
+
+  </a></td>
+  
+  
+<td align="center">
+  <a target="_blank" rel="" href="images/ADD_EDIT_Screen.png">
+        <img src="images/ADD_EDIT_Screen.png" alt="Css Logo" with="200" height="400"/>
+
+  </a></td>
+  
+  
+<td align="center">
+  <a target="_blank" rel="" href="images/EDIT_NOTE.png">
+        <img src="images/EDIT_NOTE.png" alt="Css Logo" with="200" height="400"/>
+
+  </a></td>
+  
+ 
+  <table>
+<thead>
+<tr>
+<th align="center">Home Screen Filtered</th>
+<th align="center">Home Screen Filtered</th>
+
+
+</tr>
+</thead>
+<tbody>
+<tr>
+  
+<td align="center">
+  <a target="_blank" rel="" href="images/Home_Screen.png">
+        <img src="images/Home_Screen.png" alt="Css Logo" with="200" height="400"/>
+
+  </a></td>
+  
+<td align="center">
+  <a target="_blank" rel="" href="images/Home_Screen_2.png">
+        <img src="images/Home_Screen_2.png" alt="Css Logo" with="200" height="400"/>
+
+  </a></td>
+  
+  

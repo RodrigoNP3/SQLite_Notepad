@@ -82,7 +82,7 @@ CREATE TABLE $tableNotes (
   Future<int> update(Note note) async {
     final db = await instance.database;
 
-    return db.update(
+    return await db.update(
       tableNotes,
       note.toJson(),
       where: '${NoteFields.id} = ?',
@@ -94,13 +94,14 @@ CREATE TABLE $tableNotes (
     final db = await instance.database;
     Note note = await instance.readNote(id);
     note = Note(
+      id: id,
       isImportant: !note.isImportant,
       number: note.number,
       title: note.title,
       description: note.description,
       createdTime: note.createdTime,
     );
-    return db.update(
+    return await db.update(
       tableNotes,
       note.toJson(),
       where: '${NoteFields.id} = ?',
